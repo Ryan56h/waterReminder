@@ -10,9 +10,9 @@
     <meta name="apple-mobile-web-app-title" content="Nhắc Uống Nước">
     <title>Water Reminder</title>
     <link rel="icon" type="image/svg+xml" href="icon.svg">
-    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="apple-touch-icon" href="/waterReminder/icon.svg">
     <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/waterReminder/manifest.json">
 
 </head>
 
@@ -261,7 +261,7 @@
     <script src="app.js"></script>
     <script>
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("sw.js");
+            navigator.serviceWorker.register("/waterReminder/sw.js");
         }
     </script>
 
