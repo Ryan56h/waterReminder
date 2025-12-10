@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3fa4ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Nhắc Uống Nước">
+    <title>Water Reminder</title>
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+
+</head>
+
+<body>
+
+    <!-- Splash Screen -->
+    <div id="splash" class="splash-screen">
+        <div class="splash-content">
+            <div class="splash-droplet">
+                <svg viewBox="0 0 200 240" class="droplet-svg">
+                    <defs>
+                        <linearGradient id="dropletGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#5bc0ff" />
+                            <stop offset="100%" style="stop-color:#3fa4ff" />
+                        </linearGradient>
+                    </defs>
+                    <path
+                        d="M 100 20 C 100 20, 40 110, 40 150 C 40 190, 65 220, 100 220 C 135 220, 160 190, 160 150 C 160 110, 100 20, 100 20 Z"
+                        fill="url(#dropletGradient)" class="droplet-path" />
+                    <ellipse cx="80" cy="100" rx="20" ry="35" fill="white" opacity="0.3" class="droplet-shine" />
+                </svg>
+                <div class="ripple"></div>
+                <div class="ripple ripple-2"></div>
+                <div class="ripple ripple-3"></div>
+            </div>
+            <h1 class="splash-title">💧 Nhắc Uống Nước</h1>
+            <p class="splash-subtitle">Chăm sóc sức khỏe mỗi ngày</p>
+        </div>
+    </div>
+
+    <h1>💧 Nhắc Uống Nước</h1>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-container">
+        <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </div>
+
+    <div class="card">
+        <h2 style="text-align:center;">Tiến độ hôm nay</h2>
+
+        <div class="water-bottle">
+            <div class="fill" id="fill">
+                <svg class="water-wave" viewBox="0 0 140 280" preserveAspectRatio="none">
+                    <path class="wave wave-1" d="M0,0 Q35,10 70,0 T140,0 V280 H0 Z" fill="rgba(255,255,255,0.1)" />
+                    <path class="wave wave-2" d="M0,5 Q35,15 70,5 T140,5 V280 H0 Z" fill="rgba(255,255,255,0.05)" />
+                </svg>
+            </div>
+        </div>
+
+        <p style="text-align:center;font-size:18px;margin-top:10px;">
+            <b id="current">0</b> / <b id="goal">2000</b> ml
+        </p>
+
+        <div class="btns">
+            <button onclick="add(100)">+100ml</button>
+            <button onclick="add(200)">+200ml</button>
+            <button onclick="add(300)">+300ml</button>
+        </div>
+
+        <div class="btns">
+            <button onclick="add(400)">+400ml</button>
+            <button onclick="add(500)">+500ml</button>
+            <button class="custom-btn" onclick="showCustomPopup()">✨ Khác</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2> Mục tiêu mỗi ngày</h2>
+        <select id="goalSelect" class="goal-select" onchange="changeGoal()">
+            <option value="1500">1.5L (1500ml)</option>
+            <option value="2000" selected>2L (2000ml)</option>
+            <option value="2500">2.5L (2500ml)</option>
+        </select>
+    </div>
+
+    <div class="card">
+        <h2>Nhắc nhở</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Nhận thông báo nhắc uống nước định kỳ</p>
+        <select id="reminderInterval" class="goal-select" onchange="changeReminderInterval()">
+            <option value="1800000">Mỗi 30 phút</option>
+            <option value="3600000" selected>Mỗi 1 giờ</option>
+            <option value="7200000">Mỗi 2 giờ</option>
+            <option value="0">Tắt nhắc nhở</option>
+        </select>
+    </div>
+
+    <div class="card guide-card">
+        <h2>📖 Hướng dẫn cho người mới</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
+            Nếu bạn chưa quen với việc uống nước thường xuyên, hãy thử lịch trình 8 khung giờ trong ngày:
+        </p>
+
+        <div class="water-schedule">
+            <div class="schedule-item">
+                <div class="schedule-time">
+                    <span class="time-icon">🌅</span>
+                    <span class="time-range">6:00 - 7:00</span>
+                </div>
+                <div class="schedule-content">
+                    <p class="schedule-desc">Uống 1 ly nước ấm hoặc nước lọc để cung cấp độ ẩm cho cơ thể sau giấc ngủ.
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-time">
+                    <span class="time-icon">☕</span>
+                    <span class="time-range">8:00 - 9:00</span>
+                </div>
+                <div class="schedule-content">
+                    <p class="schedule-desc">Uống thêm 1 ly nữa sau bữa sáng và bắt đầu làm việc ngày mới.</p>
+
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-time">
+                    <span class="time-icon">🍽️</span>
+                    <span class="time-range">11:00 - 12:00</span>
+                </div>
+                <div class="schedule-content">
+                    <p class="schedule-desc">Uống 1-2 ly nước để tạo cảm giác no, hạn chế ăn quá no.</p>
+
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-time">
+                    <span class="time-icon">😴</span>
+                    <span class="time-range">13:00 - 14:00</span>
+                </div>
+                <div class="schedule-content">
+                    <p class="schedule-desc">Uống nước sau giấc ngủ trưa để tạo năng lượng bắt đầu thời gian làm việc
+                        buổi chiều.</p>
+
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-time">
+                    <span class="time-icon">💼</span>
+                    <span class="time-range">15:00 - 16:00</span>
+                </div>
+                <div class="schedule-content">
+                    <p class="schedule-desc">Uống ly nước giúp bạn tập trung trong thời gian làm việc.</p>
+
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-time">
+                    <span class="time-icon">🏃</span>
+                    <span class="time-range">17:00 - 18:00</span>
+                </div>
+                <div class="schedule-content">
+                    <p class="schedule-desc">Uống 1-2 ly nước sau tập luyện thể thao và trước khi ăn tối.</p>
+
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-time">
+                    <span class="time-icon">🌆</span>
+                    <span class="time-range">19:00 - 20:00</span>
+                </div>
+                <div class="schedule-content">
+                    <p class="schedule-desc">Uống thêm 1 ly nước thanh lọc cơ thể sau ngày dài.</p>
+
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-time">
+                    <span class="time-icon">🌙</span>
+                    <span class="time-range">21:00 - 22:00</span>
+                </div>
+                <div class="schedule-content">
+                    <p class="schedule-desc">Uống 1 ly nước khoảng 30 phút trước khi ngủ để giúp cơ thể phục hồi.</p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="guide-tip">
+            <strong>💡 Mẹo:</strong> Bắt đầu với lượng nhỏ và tăng dần. Lắng nghe cơ thể bạn!
+        </div>
+    </div>
+
+    <div class="card">
+        <h2> Lịch sử uống nước</h2>
+        <div id="history"></div>
+    </div>
+
+    <div class="card">
+        <h2> Thống kê tháng này</h2>
+        <div class="stats-summary">
+            <div class="stat-item">
+                <div class="stat-value" id="monthTotal">0</div>
+                <div class="stat-label">Tổng lượng nước</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="monthAvg">0</div>
+                <div class="stat-label">Trung bình/ngày</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="monthGoal">0%</div>
+                <div class="stat-label">Đạt mục tiêu</div>
+            </div>
+        </div>
+        <canvas id="statsChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Custom Amount Popup -->
+    <div id="customPopup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>💧 Nhập lượng nước</h3>
+
+            </div>
+            <div class="popup-body">
+                <input type="number" id="customAmount" class="custom-input" placeholder="Nhập số ml..." min="1"
+                    max="5000">
+                <div class="quick-amounts">
+                    <button onclick="setCustomAmount(150)">150ml</button>
+                    <button onclick="setCustomAmount(250)">250ml</button>
+                    <button onclick="setCustomAmount(350)">350ml</button>
+                    <button onclick="setCustomAmount(600)">600ml</button>
+                    <button onclick="setCustomAmount(750)">750ml</button>
+                    <button onclick="setCustomAmount(1000)">1L</button>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn-cancel" onclick="hideCustomPopup()">Hủy</button>
+                <button class="btn-confirm" onclick="confirmCustomAmount()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js");
+        }
+    </script>
+
+
+
+</body>
+
+</html>
